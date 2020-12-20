@@ -10,11 +10,15 @@
 ; - lots of blitter waits added
 ; - MACROS used to make the code more readable
 
+; V2.1, 20.12.2020
+; - set tempo routine in the replayer didn't work correctly as it
+; checked if CIA resource was openend, fixed.
+
 
 START	bra.w	Go
 
 	dc.b	"Retro City Music Disk/Fanatic2k fix by StingRay/[S]carab^Scoopex.",10
-	dc.b	"V2.0, 19.12.2020",10
+	dc.b	"V2.1, 20.12.2020",10
 	dc.b	10
 	dc.b	"Get the source from my GitHub: https://github.com/MK1Roxxor/Patches/blob/main/RetroCity_Patch.s",10
 	dc.b	10,0
@@ -218,7 +222,9 @@ TAB	PATCH_JSR	$30,KillSys
 	PATCH_NOP	$e50+6
 	PATCH_JSR	$f1a,.wblit7
 	PATCH_NOP	$f1a+6
-	
+
+	; skip the CIA resource check in mt_SetTempo
+	PATCH_SKIP	$13f4,$13fc
 
 	dc.w	-1,0,0
 
